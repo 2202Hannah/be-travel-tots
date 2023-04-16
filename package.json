@@ -4,7 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "setup-dbs": "psql -f ./db/setup.sql",
+    "seed": "node ./db/seeds/run-seed.js",
+    "test": "jest"
   },
   "repository": {
     "type": "git",
@@ -16,5 +18,16 @@
   "bugs": {
     "url": "https://github.com/2202Hannah/be-travel-tots/issues"
   },
-  "homepage": "https://github.com/2202Hannah/be-travel-tots#readme"
+  "homepage": "https://github.com/2202Hannah/be-travel-tots#readme",
+  "engines": {
+    "node": "18.7.0"
+  },
+  "dependencies": {
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "pg": "^8.10.0"
+  },
+  "devDependencies": {
+    "pg-format": "^1.0.4"
+  }
 }
