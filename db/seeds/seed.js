@@ -1,5 +1,9 @@
 const format = require("pg-format");
 const db = require("../connection");
+const {
+  createRef,
+  formatReviews,
+} = require('./utils');
 
 const seed = async ({
   typeOfPlaceData,
@@ -118,19 +122,22 @@ CREATE TABLE typeOfPlace (
       }) => [place_id, name, type_of_place, location, address, overall_rating]
     )
   );
-  const placesPromise = db
+  const placesRows = await db
     .query(insertPlacesQueryStr)
     .then(result => result.rows);
 
-  await Promise.all([childrenPromise, placesPromise]);
+  await Promise.all([childrenPromise]);
 
 
-// place ID look up function here (would be the createRef function)  
-//format comments data here? would need a factory function. 
+// place ID look up function here 
+const placeIdLookUp = createRef(placesRows, 'name', 'article_id');
+
+//format comments data here
+const formattedReviewsData = formatReviews(reviewsData, placeIdLookUp)
 
   const insertReviewsQueryStr = format(
     "INSERT INTO reviews (review_id, place_id, rating, review_text, created_at) VALUES %L RETURNING *;",
-    reviewsData.map(({ review_id, place_id, rating, review_text, created_at }) => [
+    formattedReviewsData.map(({ review_id, place_id, rating, review_text, created_at }) => [
       review_id,
       place_id,
       rating,

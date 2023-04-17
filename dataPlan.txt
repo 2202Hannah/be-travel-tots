@@ -8,3 +8,4 @@ reviews (review_id, place_id, rating, review_text, created_at)
 
 thoughts:
 how to make sure places aren't duplicated/uploaded more than once on to the map...
+what is the best format for review score? Eg. should it be between 1 and 10, 1 and 5 or just a thumbs up or thumbs down? 
