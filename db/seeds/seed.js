@@ -1,9 +1,6 @@
 const format = require("pg-format");
 const db = require("../connection");
-const {
-  createRef,
-  formatReviews,
-} = require('./utils');
+const { createRef, formatReviews } = require("./utils");
 
 const seed = async ({
   typeOfPlaceData,
@@ -31,7 +28,7 @@ CREATE TABLE typeOfPlace (
         name VARCHAR NOT NULL,
         email VARCHAR,
         password VARCHAR,
-        profile_pic VARCHAR,
+        profile_pic_url VARCHAR,
         hometown VARCHAR
     );`);
 
@@ -67,7 +64,8 @@ CREATE TABLE typeOfPlace (
     place_id INT NOT NULL REFERENCES places(place_id),
     rating INT,
     review_text VARCHAR, 
-    created_at TIMESTAMP DEFAULT NOW()
+    created_at TIMESTAMP DEFAULT NOW(),
+    author VARCHAR REFERENCES users(username) NOT NULL
   )`);
 
   const insertTypeOfPlaceString = format(
@@ -79,14 +77,14 @@ CREATE TABLE typeOfPlace (
     .then(result => result.rows);
 
   const insertUsersQueryStr = format(
-    "INSERT INTO users (username, name, email, password, profile_pic, hometown) VALUES %L RETURNING *;",
+    "INSERT INTO users (username, name, email, password, profile_pic_url, hometown) VALUES %L RETURNING *;",
     userData.map(
-      ({ username, name, email, password, profile_pic, hometown }) => [
+      ({ username, name, email, password, profile_pic_url, hometown }) => [
         username,
         name,
         email,
         password,
-        profile_pic,
+        profile_pic_url,
         hometown
       ]
     )
@@ -128,22 +126,24 @@ CREATE TABLE typeOfPlace (
 
   await Promise.all([childrenPromise]);
 
+  // place ID look up function here
+  const placeIdLookUp = createRef(placesRows, "name", "article_id");
 
-// place ID look up function here 
-const placeIdLookUp = createRef(placesRows, 'name', 'article_id');
-
-//format comments data here
-const formattedReviewsData = formatReviews(reviewsData, placeIdLookUp)
+  //format comments data here
+  const formattedReviewsData = formatReviews(reviewsData, placeIdLookUp);
 
   const insertReviewsQueryStr = format(
-    "INSERT INTO reviews (review_id, place_id, rating, review_text, created_at) VALUES %L RETURNING *;",
-    formattedReviewsData.map(({ review_id, place_id, rating, review_text, created_at }) => [
-      review_id,
-      place_id,
-      rating,
-      review_text,
-      created_at
-    ])
+    "INSERT INTO reviews (review_id, place_id, rating, review_text, created_at, author) VALUES %L RETURNING *;",
+    formattedReviewsData.map(
+      ({ review_id, place_id, rating, review_text, created_at, author }) => [
+        review_id,
+        place_id,
+        rating,
+        review_text,
+        created_at,
+        author
+      ]
+    )
   );
   return db.query(insertReviewsQueryStr).then(result => result.rows);
 };
