@@ -1,23 +1,23 @@
 module.exports = [
   {
-    slug: "shopping centre",
+    type: "shopping centre",
     description: "A selection of shops and cafes usually indoors like a mall"
   },
   {
-    slug: "bar",
+    type: "bar",
     description: "A social space that serves alcohol"
   },
   {
-    slug: "cafe",
+    type: "cafe",
     description:
       "A relaxed eating and drinking enviornment that is usually open in the daytime"
   },
   {
-    slug: "pub",
+    type: "pub",
     description: "A place that serves alcohol and sometimes food too"
   },
   {
-    slug: "restaurant",
+    type: "restaurant",
     description: "A place to be wined and dined"
   }
 ];

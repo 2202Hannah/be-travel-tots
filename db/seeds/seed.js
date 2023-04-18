@@ -18,7 +18,7 @@ const seed = async ({
 
   const typeOfPlaceTablePromise = db.query(`
 CREATE TABLE typeOfPlace (
-  slug VARCHAR PRIMARY KEY,
+  type VARCHAR PRIMARY KEY,
   description VARCHAR
 );`);
 
@@ -50,7 +50,7 @@ CREATE TABLE typeOfPlace (
   CREATE TABLE places (
     place_id SERIAL PRIMARY KEY, 
     name VARCHAR NOT NULL,
-    type_of_place VARCHAR NOT NULL REFERENCES typeOfPlace(slug),
+    type_of_place VARCHAR NOT NULL REFERENCES typeOfPlace(type),
     location VARCHAR,
     address VARCHAR,
     overall_rating INT
@@ -69,8 +69,8 @@ CREATE TABLE typeOfPlace (
   )`);
 
   const insertTypeOfPlaceString = format(
-    "INSERT INTO typeOfPlace (slug, description) VALUES %L RETURNING *;",
-    typeOfPlaceData.map(({ slug, description }) => [slug, description])
+    "INSERT INTO typeOfPlace (type, description) VALUES %L RETURNING *;",
+    typeOfPlaceData.map(({ type, description }) => [type, description])
   );
   const typeOfPlacePromise = db
     .query(insertTypeOfPlaceString)
