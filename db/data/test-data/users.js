@@ -2,12 +2,18 @@ module.exports = [
   {
     username: "2202Hannah",
     name: "Hannah Barber",
-    password: "password123"
+    email: "hannahbarber22@hotmail.co.uk",
+    password: "password123",
+    profile_pic_url: "pic.com",
+    hometown: "Salford"
   },
   {
     username: "pat",
     name: "Patrick Lawrence",
-    password: "password123"
+    email: "pat@pat.com",
+    password: "password123",
+    profile_pic_url: "pic.com",
+    hometown: "Salford"
   },
   {
     username: "RayRay",

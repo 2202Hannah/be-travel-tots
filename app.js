@@ -2,11 +2,13 @@ const express = require("express");
 const app = express();
 const { getTypes } = require(`./controllers/types.controller`);
 const { getPlaceById } = require(`./controllers/places.controller`);
+const { getUsers } = require(`./controllers/users.controller`)
 
 app.use(express.json());
 
 app.get(`/api/types`, getTypes);
 app.get(`/api/places/:place_id`, getPlaceById);
+app.get(`/api/users`, getUsers);
 
 app.all("/*", (request, response) => {
   response.status(404).send({ msg: "Route not found" });

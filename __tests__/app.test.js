@@ -65,7 +65,7 @@ describe("GET /api/places/:place_id", () => {
             name: "Stretford Mall",
             type_of_place: "shopping centre",
             location: "Greater Manchester",
-            address: "Chester Rd, Stretford, Manchester M32 9BD",
+            address: "Chester Rd, Stretford, Manchester M32 9BD"
           })
         );
       });
@@ -84,6 +84,35 @@ describe("GET /api/places/:place_id", () => {
       .expect(404)
       .then(({ body }) => {
         expect(body.msg).toBe("place_id not found in the database");
+      });
+  });
+});
+
+describe("GET /api/users", () => {
+  test("return status 200 when successful", () => {
+    return request(app)
+      .get("/api/users")
+      .expect(200);
+  });
+  test("return an object with the expected values for users", () => {
+    return request(app)
+      .get("/api/users")
+      .then(({ body }) => {
+        const usersArray = body.users;
+        expect(usersArray).toHaveLength(4);
+
+        usersArray.forEach(user => {
+          expect(user).toEqual(
+            expect.objectContaining({
+              username: expect.any(String),
+              name: expect.any(String),
+              email: expect.any(String),
+              password: expect.any(String),
+              profile_pic_url: expect.any(String),
+              hometown: expect.any(String)
+            })
+          );
+        });
       });
   });
 });
