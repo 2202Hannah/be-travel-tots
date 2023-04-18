@@ -11,3 +11,4 @@ how to make sure places aren't duplicated/uploaded more than once on to the map.
 what is the best format for review score? Eg. should it be between 1 and 10, 1 and 5 or just a thumbs up or thumbs down? 
 make sure that each username is unique, a patch request will not work if username is not unique 
 make sure email is correct format otherwise give an error
+will overall rating be calculated on the frontend or the backend?

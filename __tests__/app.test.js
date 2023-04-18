@@ -48,3 +48,42 @@ describe("GET /api/types", () => {
       });
   });
 });
+
+describe("GET /api/places/:place_id", () => {
+  test("return status 200 when successful", () => {
+    return request(app)
+      .get("/api/places/1")
+      .expect(200);
+  });
+  test("return an object with the expected values for the place", () => {
+    return request(app)
+      .get("/api/places/1")
+      .then(({ body: place }) => {
+        expect(place.place).toEqual(
+          expect.objectContaining({
+            place_id: 1,
+            name: "Stretford Mall",
+            type_of_place: "shopping centre",
+            location: "Greater Manchester",
+            address: "Chester Rd, Stretford, Manchester M32 9BD",
+          })
+        );
+      });
+  });
+  test("400: responds with an error when passed a place_id of an incorrect type", () => {
+    return request(app)
+      .get("/api/places/not-a-number")
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("You have made a bad request - invalid type");
+      });
+  });
+  test("404: responds with an error when passed a place_id not present in our database", () => {
+    return request(app)
+      .get("/api/places/10")
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe("place_id not found in the database");
+      });
+  });
+});
