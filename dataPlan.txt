@@ -3,7 +3,7 @@ users (username, name, email, password, profile_pic, hometown),
 children (child_id, parent_id, child_dob),
 places (place_id, name, type_of_place, location, address, overall_rating), 
 **amenities (amenity, description),  
-typeOfPlace (slug, description),
+typeOfPlace (type, description),
 reviews (review_id, place_id, rating, review_text, created_at)
 
 thoughts:

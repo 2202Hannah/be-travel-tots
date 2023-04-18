@@ -12,13 +12,12 @@ const seed = async ({
   await db.query(`DROP TABLE IF EXISTS reviews`);
   await db.query(`DROP TABLE IF EXISTS places`);
   await db.query(`DROP TABLE IF EXISTS children`);
-  //await db.query(`DROP TABLE IF EXISTS amenities`);
   await db.query(`DROP TABLE IF EXISTS typeOfPlace`);
   await db.query(`DROP TABLE IF EXISTS users`);
 
   const typeOfPlaceTablePromise = db.query(`
 CREATE TABLE typeOfPlace (
-  slug VARCHAR PRIMARY KEY,
+  type VARCHAR PRIMARY KEY,
   description VARCHAR
 );`);
 
@@ -31,11 +30,6 @@ CREATE TABLE typeOfPlace (
         profile_pic_url VARCHAR,
         hometown VARCHAR
     );`);
-
-  // const amenityTablePromise = db.query(`
-  // CREATE TABLE amenities (
-
-  // )`)
 
   await Promise.all([typeOfPlaceTablePromise, usersTablePromise]);
 
@@ -50,7 +44,7 @@ CREATE TABLE typeOfPlace (
   CREATE TABLE places (
     place_id SERIAL PRIMARY KEY, 
     name VARCHAR NOT NULL,
-    type_of_place VARCHAR NOT NULL REFERENCES typeOfPlace(slug),
+    type_of_place VARCHAR NOT NULL REFERENCES typeOfPlace(type),
     location VARCHAR,
     address VARCHAR,
     overall_rating INT
@@ -69,8 +63,8 @@ CREATE TABLE typeOfPlace (
   )`);
 
   const insertTypeOfPlaceString = format(
-    "INSERT INTO typeOfPlace (slug, description) VALUES %L RETURNING *;",
-    typeOfPlaceData.map(({ slug, description }) => [slug, description])
+    "INSERT INTO typeOfPlace (type, description) VALUES %L RETURNING *;",
+    typeOfPlaceData.map(({ type, description }) => [type, description])
   );
   const typeOfPlacePromise = db
     .query(insertTypeOfPlaceString)
