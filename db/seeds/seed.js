@@ -12,7 +12,6 @@ const seed = async ({
   await db.query(`DROP TABLE IF EXISTS reviews`);
   await db.query(`DROP TABLE IF EXISTS places`);
   await db.query(`DROP TABLE IF EXISTS children`);
-  //await db.query(`DROP TABLE IF EXISTS amenities`);
   await db.query(`DROP TABLE IF EXISTS typeOfPlace`);
   await db.query(`DROP TABLE IF EXISTS users`);
 
@@ -31,11 +30,6 @@ CREATE TABLE typeOfPlace (
         profile_pic_url VARCHAR,
         hometown VARCHAR
     );`);
-
-  // const amenityTablePromise = db.query(`
-  // CREATE TABLE amenities (
-
-  // )`)
 
   await Promise.all([typeOfPlaceTablePromise, usersTablePromise]);
 

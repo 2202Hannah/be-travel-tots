@@ -1,7 +1,6 @@
 const app = require(`../app.js`);
 const request = require("supertest");
 const db = require("../db/connection");
-//const contents = require("../endpoints.json");
 
 const seed = require("../db/seeds/seed");
 const data = require("../db/data/test-data");
