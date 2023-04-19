@@ -47,17 +47,17 @@ content: PGDATABASE=travel_tots_test
 ### To create the local database run:
 
 ```bash dark
-npm setup-dbs
+npm run setup-dbs
 ```
 
 ### To seed the local database run:
 
 ```bash dark
-npm seed
+npm run seed
 ```
 
 ### To run tests:
 
 ```bash dark
-npm test
+npm run test
 ```
