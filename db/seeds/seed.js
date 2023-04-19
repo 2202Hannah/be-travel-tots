@@ -1,6 +1,6 @@
 const format = require("pg-format");
 const db = require("../connection");
-const { createRef, formatReviews } = require("./utils");
+const { convertTimestampToDate, createRef, formatReviews } = require("./utils");
 
 const seed = async ({
   typeOfPlaceData,
@@ -47,7 +47,9 @@ CREATE TABLE typeOfPlace (
     type_of_place VARCHAR NOT NULL REFERENCES typeOfPlace(type),
     location VARCHAR,
     address VARCHAR,
-    overall_rating INT
+    created_at TIMESTAMP DEFAULT NOW(),
+    votes_up INT DEFAULT 0 NOT NULL,
+    votes_down INT DEFAULT 0 NOT NULL
   )`);
 
   await Promise.all([childrenTablePromise, placesTablePromise]);
@@ -101,17 +103,29 @@ CREATE TABLE typeOfPlace (
     .query(insertChildrenQueryStr)
     .then(result => result.rows);
 
+  const formattedPlacesData = placesData.map(convertTimestampToDate);
   const insertPlacesQueryStr = format(
-    "INSERT INTO places (place_id, name, type_of_place, location, address, overall_rating) VALUES %L RETURNING *;",
-    placesData.map(
+    "INSERT INTO places (place_id, name, type_of_place, location, address, created_at, votes_up, votes_down) VALUES %L RETURNING *;",
+    formattedPlacesData.map(
       ({
         place_id,
         name,
         type_of_place,
         location,
         address,
-        overall_rating
-      }) => [place_id, name, type_of_place, location, address, overall_rating]
+        created_at,
+        votes_up,
+        votes_down
+      }) => [
+        place_id,
+        name,
+        type_of_place,
+        location,
+        address,
+        created_at,
+        votes_up,
+        votes_down
+      ]
     )
   );
   const placesRows = await db
