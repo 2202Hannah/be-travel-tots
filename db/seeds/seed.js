@@ -48,8 +48,7 @@ CREATE TABLE typeOfPlace (
     location VARCHAR,
     address VARCHAR,
     created_at TIMESTAMP DEFAULT NOW(),
-    votes_up INT DEFAULT 0 NOT NULL,
-    votes_down INT DEFAULT 0 NOT NULL
+    votes INT DEFAULT 0 NOT NULL
   )`);
 
   await Promise.all([childrenTablePromise, placesTablePromise]);
@@ -105,7 +104,7 @@ CREATE TABLE typeOfPlace (
 
   const formattedPlacesData = placesData.map(convertTimestampToDate);
   const insertPlacesQueryStr = format(
-    "INSERT INTO places (place_id, name, type_of_place, location, address, created_at, votes_up, votes_down) VALUES %L RETURNING *;",
+    "INSERT INTO places (place_id, name, type_of_place, location, address, created_at, votes) VALUES %L RETURNING *;",
     formattedPlacesData.map(
       ({
         place_id,
@@ -114,8 +113,7 @@ CREATE TABLE typeOfPlace (
         location,
         address,
         created_at,
-        votes_up,
-        votes_down
+        votes
       }) => [
         place_id,
         name,
@@ -123,8 +121,7 @@ CREATE TABLE typeOfPlace (
         location,
         address,
         created_at,
-        votes_up,
-        votes_down
+        votes
       ]
     )
   );
