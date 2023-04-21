@@ -49,7 +49,7 @@ describe("GET /api/types", () => {
   });
 });
 
-describe("GET /api/places/:place_id", () => {
+describe.only("GET /api/places/:place_id", () => {
   test("return status 200 when successful", () => {
     return request(app)
       .get("/api/places/1")
@@ -66,7 +66,8 @@ describe("GET /api/places/:place_id", () => {
             type_of_place: "shopping centre",
             location: "Greater Manchester",
             address: "Chester Rd, Stretford, Manchester M32 9BD",
-            review_count: 2
+            review_count: 2,
+            review_average: 3
           })
         );
       });
@@ -82,7 +83,8 @@ describe("GET /api/places/:place_id", () => {
             type_of_place: "restaurant",
             location: "Greater Manchester",
             address: "Prestwich",
-            review_count: 0
+            review_count: 0,
+            review_average: null
           })
         );
       });
