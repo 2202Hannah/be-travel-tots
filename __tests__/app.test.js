@@ -49,7 +49,7 @@ describe("GET /api/types", () => {
   });
 });
 
-describe.only("GET /api/places/:place_id", () => {
+describe("GET /api/places/:place_id", () => {
   test("return status 200 when successful", () => {
     return request(app)
       .get("/api/places/1")
