@@ -19,7 +19,7 @@ module.exports = [
   },
   {
     review_id: 3,
-    place_id: 2,
+    place_id: 3,
     rating: 1,
     review_text: "Baby change area and highchairs were disgusting",
     created_at: 1594329060000,
@@ -32,6 +32,6 @@ module.exports = [
     review_text:
       "Big family friendly pub with a very reasonably priced kids menu and clean baby change in the disabled toilet",
     created_at: 1594329060000,
-    author: "redross"
+    author: "RayRay"
   }
 ];

@@ -55,7 +55,7 @@ describe("GET /api/places/:place_id", () => {
       .get("/api/places/1")
       .expect(200);
   });
-  test("return an object with the expected values for the place", () => {
+  test("return an object with the expected values for the place that has reviews", () => {
     return request(app)
       .get("/api/places/1")
       .then(({ body: place }) => {
@@ -65,7 +65,24 @@ describe("GET /api/places/:place_id", () => {
             name: "Stretford Mall",
             type_of_place: "shopping centre",
             location: "Greater Manchester",
-            address: "Chester Rd, Stretford, Manchester M32 9BD"
+            address: "Chester Rd, Stretford, Manchester M32 9BD",
+            review_count: 2
+          })
+        );
+      });
+  });
+  test("return an object with the expected values for the place that has 0 reviews", () => {
+    return request(app)
+      .get("/api/places/2")
+      .then(({ body: place }) => {
+        expect(place.place).toEqual(
+          expect.objectContaining({
+            place_id: 2,
+            name: "Karen's Diner",
+            type_of_place: "restaurant",
+            location: "Greater Manchester",
+            address: "Prestwich",
+            review_count: 0
           })
         );
       });
