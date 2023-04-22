@@ -116,3 +116,71 @@ describe("GET /api/users", () => {
       });
   });
 });
+
+describe("PATCH /api/places/:place_id", () => {
+  test("200: returns status 200 and the updated object with updated votes amount when successful", () => {
+    return request(app)
+      .patch("/api/places/1")
+      .expect(200)
+      .send({ inc_votes: -5 })
+      .then(({ body }) => {
+        expect(body.place).toEqual(
+          expect.objectContaining({
+            place_id: 1,
+            name: "Stretford Mall",
+            type_of_place: "shopping centre",
+            location: "Greater Manchester",
+            address: "Chester Rd, Stretford, Manchester M32 9BD",
+            created_at: "2020-07-09T20:11:00.000Z",
+            votes: 0
+          })
+        );
+      });
+  });
+  test("200: returns the place unchanged when passed an empty object", () => {
+    return request(app)
+      .patch("/api/places/1")
+      .send({})
+      .expect(200)
+      .then(({ body }) => {
+        expect(body.place).toEqual(
+          expect.objectContaining({
+            place_id: 1,
+            name: "Stretford Mall",
+            type_of_place: "shopping centre",
+            location: "Greater Manchester",
+            address: "Chester Rd, Stretford, Manchester M32 9BD",
+            created_at: "2020-07-09T20:11:00.000Z",
+            votes: 5
+          })
+        );
+      });
+  });
+  test("400: responds with an error when passed a place_id of an incorrect type", () => {
+    return request(app)
+      .patch("/api/places/not-a-number")
+      .send({ inc_votes: 1 })
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("You have made a bad request - invalid type");
+      });
+  });
+  test("400: responds with an error when passed a votes update that is an invalid type", () => {
+    return request(app)
+      .patch("/api/places/1")
+      .send({ inc_votes: "not-a-number" })
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("You have made a bad request - invalid type");
+      });
+  });
+  test("404: responds with an error when passed a place_id not present in our database", () => {
+    return request(app)
+      .patch("/api/places/100000")
+      .send({ inc_votes: 1 })
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe("place_id not found in the database");
+      });
+  });
+});
