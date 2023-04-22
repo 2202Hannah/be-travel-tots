@@ -1,10 +1,13 @@
 const db = require(`../db/connection`);
 
 exports.selectPlaceById = place_id => {
-
   return db
     .query(
-      `SELECT place_id, name, type_of_place, location, address FROM places WHERE place_id = $1;`,
+      `SELECT p.place_id, p.name, p.type_of_place, p.location, p.address, COUNT(review_id) ::INT AS review_count, AVG(rating) ::INT AS review_average 
+      FROM places p
+      LEFT JOIN reviews r ON p.place_id = r.place_id 
+      WHERE p.place_id = $1 
+      GROUP BY p.place_id;`,
       [place_id]
     )
     .then(({ rows }) => {
