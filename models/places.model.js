@@ -23,7 +23,6 @@ exports.selectPlaceById = place_id => {
 };
 
 exports.updatePlaceVotes = (place_id, votes = 0) => {
-  
   return db
     .query(
       `UPDATE places SET votes = votes + $1 WHERE place_id = $2 RETURNING *`,
@@ -31,7 +30,6 @@ exports.updatePlaceVotes = (place_id, votes = 0) => {
     )
     .then(({ rows }) => {
       if (rows.length === 1) {
-        
         return rows[0];
       } else {
         return Promise.reject({
@@ -40,4 +38,15 @@ exports.updatePlaceVotes = (place_id, votes = 0) => {
         });
       }
     });
+};
+
+exports.selectPlaces = typeFilter => {
+let queryString = `SELECT p.place_id, u.username AS added_by, p.name, created_at, votes, location, address, COUNT(review_id) ::INT AS review_count FROM place p 
+INNER JOIN reviews r ON p.place_id = r.place_id
+LEFT OUTER JOIN users u ON p.user_id = u.user_id`
+
+  if (typeFilter) {
+    queryString += ` WHERE type_of_place = $1`;
+    valueArray.push(topicFilter);
+  }
 };
